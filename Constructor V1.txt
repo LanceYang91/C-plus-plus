@@ -1,0 +1,82 @@
+// ConsoleApplication11.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class students{
+private:
+	//declaration within class
+	string name;
+	string phone_number;
+	int student_number;
+	double current_gpa;
+
+public:
+	//function within class
+	void displayValue();
+	string get_name();
+	string get_phone_number();
+	int get_student_number();
+	double get_current_gpa();
+
+	//default constructor 
+	students(){ 
+		name = "Souk";
+		phone_number = "(123)-456-789";
+		student_number = 1;
+		current_gpa = 3.5;
+	}
+
+	//constructor with parameters 4
+	//non-default constructor
+	students(string n, string pn, int sn, double cgpa){
+		name = n;
+		phone_number = pn;
+		student_number = sn;
+		current_gpa = cgpa;
+	}
+
+};
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	//declaration for class
+	students dc, ndc("Lan", "(789)-456-123", 2, 4);
+
+	//output for default constructor 
+	dc.displayValue();
+
+	//output for non default constructor
+	ndc.displayValue();
+
+	system("pause");
+	return 0;
+}
+
+//output
+void students::displayValue(){
+	cout << "Name: " <<  name << "\n"
+		 << "Phone Number: " << phone_number << "\n" 
+	   	 << "Student Number: " << student_number << "\n"
+		 << "Current GPA: " << current_gpa << "\n\n";
+}
+
+string students::get_name(){
+		return name;	
+	}
+	
+string students::get_phone_number(){
+		return phone_number;
+	}
+
+int students::get_student_number(){
+		return student_number;
+	}
+
+double students::get_current_gpa(){
+		return current_gpa;
+	}

@@ -1,0 +1,49 @@
+//[C++]
+//[Couting Letters]
+
+//----[START]----
+
+#include "stdafx.h"
+#include <iostream>
+#include <cctype>
+
+using namespace std; 
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	char input;
+	int count = 0;
+	double price, total;
+	bool fail;
+
+	do{
+		cout<<"Enter a price for each letter:$";
+		cin>>price;	
+
+		fail=cin.fail();
+
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	}while (fail == true);
+
+	cout<<"\n";
+
+	cout<<"Please enter a character, Type '^' to end: ";
+	cin>>input;
+	for(; input !='^'; count++){
+		cout<<"Please enter a character, Type '^' to end: ";
+		cin>>input;
+	}
+	cout<<"\n";
+
+	total = price * count;
+
+	cout<<"You have "<<count<<" letters at $"<<price<<" per letter, and your total is:$"<<total;
+	cout<<"\n"<<"\n";
+	
+	system("Pause"); 
+	return 0;
+}
+
+//----[END]----

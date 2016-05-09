@@ -1,0 +1,91 @@
+// Programming II_MOD06_Assignment.cpp : Defines the entry point for the console application.
+
+
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//class 1
+class Person{
+public: 
+	string name;
+	string address;
+	string city;
+	string state;
+	string zip;
+	string phoneNumber;
+
+	//function within class
+	void displayValue();
+
+	//default constructor
+	Person(){
+		name = "Dave";
+		address = "111 Home Ave";
+		city = "plantcity";
+		state = "NC";
+		zip = "22222";
+		phoneNumber = "(213) - 453 - 8679";
+	}
+};
+
+//class 2 inheritence
+class Student: public Person{
+public:
+	string grade;
+	string gpa; 
+	string course;
+
+	//function
+	void display();
+
+	//default constructor
+	Student(){
+		grade = "D";
+		gpa = "2.5";
+		course = "math";
+	}
+};
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Person one;
+	Student two;
+
+	//class output person
+	one.displayValue();
+
+	//creat some space
+	cout << "\n\n\n\n";
+
+	//class output of student
+	two.display();
+
+	system("pause");
+	return 0;
+}
+
+//function class, output
+void Person::displayValue(){
+	cout << "name: " << name << "\n"
+		<< "address: " << address << "\n"
+		<< "city: " << city << "\n"
+		<< "state: " << state << "\n"
+		<< "zip: " << zip << "\n"
+		<< "phone number: " << phoneNumber << "\n";
+}
+
+void Student::display(){
+	cout << "name: " << name << "\n"
+		<< "address: " << address << "\n"
+		<< "city: " << city << "\n"
+		<< "state: " << state << "\n"
+		<< "zip: " << zip << "\n"
+		<< "phone number: " << phoneNumber << "\n"
+		<< "grade: " << grade << "\n"
+		<< "gpa: " << gpa << "\n"
+		<< "course: " << course << "\n";
+}

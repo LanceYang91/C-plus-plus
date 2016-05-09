@@ -1,0 +1,49 @@
+//[Visual Studios]
+
+//[C++ CODE]
+
+//[OUtput/Input/String]
+
+//- How to do: 
+//	input
+//	output
+//	string
+
+//----[START]----
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+using std::cin;
+using std::endl;
+
+
+int_tmain
+{
+	[1]string player1, player2;
+	[2]string score1, score2;
+
+	[3]cout<<"Enter a name for player 1: ";
+	[4]getline (cin,player1);
+	[5]cout<<"Enter a score for player 1: ";
+	[6]getline (cin,score1);
+
+	[7]system("pause")
+}
+
+//----[END]----
+	
+
+//[1] and [2]
+//	- Empty statements that we created. 
+//		- Like an empty BOX that we want to put stuff in.
+
+//[3] and [5]
+//	- cout = display this message in " " so the user can see it.
+
+//[4] and [6]
+//	- getline (cin,player1)
+//		- Means to get the input from the user (cin) and then place into 			the empty string //(player1)
+//
+//[7]	- system pause so the window screen does not end immediately.

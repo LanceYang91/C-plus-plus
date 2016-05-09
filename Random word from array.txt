@@ -1,0 +1,40 @@
+
+//[Random word from array]
+
+//[C++]
+
+----[START]----
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	enum fields {WORD, NUM_FIELDS};
+	const int MAX = 5;
+	srand(static_cast<unsigned int>(time(NULL)));
+
+	const string nouns[MAX][NUM_FIELDS] = {
+		{"DOG"},
+		{"CAT"},
+		{"MOOSE"},
+		{"APRIL"},
+		{"home"}
+	};
+
+	int choice = (rand()% MAX);
+	string theWord = nouns[choice][WORD];
+	cout<<theWord<<endl;
+
+
+	system("pause");
+	return 0;
+}
+
+----[END]----

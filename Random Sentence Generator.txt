@@ -1,0 +1,106 @@
+// ConsoleApplication9.cpp : Defines the entry point for the console application.
+
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <ctime>
+
+using namespace std;
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	const int MAX_WORD = 5;
+	srand(static_cast<unsigned int>(time(NULL)));
+	string nouns[MAX_WORD], verbs[MAX_WORD], objects[MAX_WORD];
+	int n, v, o;
+	
+	cout << "WARNING will display 125 sentences due to 5 * 5 * 5\n\n\n";
+	cout << "Please finish the following sentence." << endl;
+	cout << "\n [noun] started to [verb] and then grabbed a [object]." << endl;
+	cout << "\n\n";
+
+	//User input for nouns
+	for ( n = 0; n < MAX_WORD; n++){
+		cout << "Please enter a noun: ";
+		cin >> nouns[n];
+	}
+
+	//Output of Noun array
+	//cout << "your noun:\n";
+	//for (int n = 0; n < MAX_WORD; n++){
+	//	cout << nouns[n] << endl;
+	//}
+
+	//Random output for noun
+	//int randomNoun = (rand()% MAX_WORD);
+	//string noun = nouns[randomNoun];
+	//cout << noun;
+	cout << "\n\n";
+
+	cout << "The sentence is: " << endl;
+	cout << "\n [noun] started to [verb] and then grabbed a [object]." << endl;
+	cout << "\n\n";
+
+	//User input for verbs
+	for ( v = 0; v < MAX_WORD; v++){
+		cout << "Please enter a verb: ";
+		cin >> verbs[v];
+	}
+
+	//Random output for verb
+	//int randomVerb = (rand()% MAX_WORD);
+	//string verb = verbs[randomVerb];
+	//cout << verb;
+	cout << "\n\n";
+
+	cout << "The sentence is: " << endl;
+	cout << "\n [noun] started to [verb] and then grabbed a [object]." << endl;
+	cout << "\n\n";
+
+	//User input for objects
+	for ( o = 0; o < MAX_WORD; o++){
+		cout << "Please enter a object: ";
+		cin >> objects[o];
+	}
+
+	//Random output for object
+	//int randomObject = (rand()% MAX_WORD);
+	//string object = objects[randomObject];
+	//cout << object;
+	cout << "\n\n";
+	
+	cout << "Your sentence is: \n\n" << endl;
+
+	// 5 times 5 times 5 = 5 words from each array for combination of a sentence.
+	//int sentence = 5 * 5 * 5;
+	int sentence = n * v * o;
+
+	//sentence generator
+	// [noun] started to [verb] and then grabbed a [object].
+	for (int s = 0; s < sentence; s++){
+
+		//Random output for noun
+		int randomNoun = (rand()% MAX_WORD);
+		string noun = nouns[randomNoun];
+		
+
+		//Random output for verb
+		int randomVerb = (rand()% MAX_WORD);
+		string verb = verbs[randomVerb];
+		
+
+		//Random output for object
+		int randomObject = (rand()% MAX_WORD);
+		string object = objects[randomObject];
+		
+
+		cout << noun << " started to " << verb << " and then grabbed a " << object << "." << endl; 
+
+		cout << "\n\n";
+	}
+
+	system("pause");
+	return 0;
+}

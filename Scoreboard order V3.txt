@@ -1,0 +1,119 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	vector<string> name(3), score(3);
+	vector<int> fakeScore(3);
+	stringstream ss1;
+	int i;
+	bool success;
+	string choice;
+	
+	
+
+	for (i = 0; i < 3; i++){
+		//Name input
+		cout << "Please enter a name: ";
+		cin >> name[i];
+
+
+		//score input
+		while(true){
+			cout << "Please enter a score for " << name[i] <<": ";
+			cin >> score[i];
+			cout << "\n";
+			stringstream mystream(score[i]);
+			if (mystream >> fakeScore[i])
+				break;
+			cout << "Invalid number, try again."<<"\n\n";
+		}
+
+		//input into ss1
+		ss1 << name[i] << "\t" << fakeScore[i] <<"\n" ;
+		
+	}
+
+
+	//score board output of user input
+	cout << "You have entered" << "\n\n";
+	cout << "NAME" <<"\t" <<"SCORE" << endl;
+	cout << ss1.str() << endl;
+	cout << "\n\n";
+
+	cout << "1 - Alphabetical output" << endl;
+	cout << "2 - Descending order output" << endl;
+	cout << "3 - Quit" << endl;
+	cout << "\n";
+
+	
+	do{
+		cout << "Enter a number 1 - 3:  ";
+		cin >> choice; 
+		cout << "\n\n";
+
+		if (choice == "1"){
+
+			//adding space
+			string space[3] = {"\t","\t","\t"};	
+			for (i = 0; i < 3; i++){
+				name[i] += space[i] += score[i];
+			}
+	
+			//alphabetical output code iter1
+			cout << "ALPHABETICAL OUTPUT" << endl;
+			cout << "NAME" <<"\t" << "SCORE" << endl;
+			vector<string>::const_iterator iter1;
+			sort (name.begin(), name.end());
+			for (iter1 = name.begin(); iter1 != name.end(); iter1++){		
+				cout << *iter1 << endl;	
+			}
+			cout << "\n\n";
+			success = true;
+		}
+
+		else if (choice == "2"){
+
+			//adding space coding test
+			string space[3] = {"\t","\t","\t"};
+			for (i = 0; i < 3; i++){
+				score[i] += space[i] += name[i];	
+			}
+	
+			//descending score output coding test iter2
+			cout << "NUMBER OUTPUT" << endl;
+			cout << "SCORE" << "\t" << "NAME" << endl;
+			vector<string>::const_iterator iter2;
+			sort (score.rbegin(), score.rend());
+			for (iter2 = score.begin(); iter2 != score.end(); iter2++){	
+					cout << *iter2 << endl;
+				}
+			//end coding test
+			success = true;
+		}
+
+		else if (choice == "3"){
+			break;
+			success = true;
+
+		}
+
+		else {
+			cout<< "\n";
+			cout<< "Invalid number, please try again" << "\n" << "\n";
+			success = false;
+			}
+
+		}while(!success);
+
+	system("pause");
+	return 0;
+
+}

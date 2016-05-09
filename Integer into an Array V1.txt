@@ -1,0 +1,19 @@
+//[seperating whole number into an array]	
+
+
+
+	//seperating whole number into array
+	int array[6];
+	int number = 123456;
+
+	//%10 allows the remainder to be kept
+	// /10 allows the number to be divided by 10
+	for (int i = 5; i >=0; i--){
+		array [i] = number % 10;
+		number /= 10;
+	}
+
+	//for output	
+	for(int x = 0; x < 5; x++){
+		cout << array[x];
+	}

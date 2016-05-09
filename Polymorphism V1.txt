@@ -1,0 +1,60 @@
+// Programming II_MOD06_Assignment.cpp : Defines the entry point for the console application.
+//
+//	Changed to the use of polymorphism
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//class 1
+class Person{
+public: 
+	//declaration
+	int attackPower;
+
+	//function
+	void setAttackPower(int a){
+		attackPower = a;
+	}
+		
+};
+
+//class 2 
+class Student: public Person{
+public:
+	void attack(){
+		cout << "i'm a ninja, ninja usde ninja chop! -" << attackPower << endl;
+	}
+	
+
+};
+
+//class 3
+class Professional: public Person{
+public:
+	void attack(){
+		cout << "i'm a monster, monster used bite! -" << attackPower << endl;
+	}
+};
+
+//main window
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Student s;
+	Professional p;
+
+	Person *person1 = &s;
+	Person *person2 = &p;
+
+	person1->setAttackPower(10);
+	person2->setAttackPower(20);
+
+	s.attack();
+	p.attack();
+
+	system("pause");
+	return 0;
+}

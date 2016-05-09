@@ -1,0 +1,48 @@
+
+
+
+
+#include "stdafx.h"
+#include <iostream>
+#include <list>
+using namespace std;
+
+const int NUM_OF_STUDENTS = 3;
+
+void main(){
+
+     //Creates a list of int
+     list<int> studentScores;
+
+     //Adds values to the list using push_back
+     for(int i=0; i<NUM_OF_STUDENTS; i++){
+          studentScores.push_back(i);
+     }
+
+     cout<<"Here are the scores"<<endl;
+
+     //Need to create an interator to iterate through the scores in the list.
+     list<int>::iterator iter;
+
+     //Displays the values. Note, how iterators gets the begin and end
+     for(iter=studentScores.begin(); iter != studentScores.end(); iter++){
+          cout<<*iter<<" ";
+     }
+
+     cout<<endl;
+
+     //Modifies values of the list, increasing them by 1
+     //The dereference operator asterisk (*) is used to access the value
+     for(iter=studentScores.begin(); iter != studentScores.end(); iter++){
+          *iter = *iter + 1;
+     }
+
+     //Displays the values
+     cout<<"Here are the modified scores"<<endl;
+     for(iter=studentScores.begin(); iter != studentScores.end(); iter++){
+          cout<<*iter<<" ";
+     }
+
+     cout<<endl;
+     system("pause");
+}

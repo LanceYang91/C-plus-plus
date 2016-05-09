@@ -1,0 +1,75 @@
+//[C++]
+
+
+
+
+//----[START]----
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <ctime>
+
+using namespace std;
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	string choice;
+	bool success;
+
+	cout<<"\tGame Maker 2014"<<"\n"<<endl;
+	cout<<"1 - 6 Random Numbers Generator "<<endl;
+	cout<<"2 - About me"<<endl;
+	cout<<"3 - Truth"<<endl;
+
+	cout<<"\n";
+
+	do{ 
+		cout<<"Please enter a number: ";
+		cin>>choice;
+
+		if(choice == "1"){ 
+			cout<<"\n";
+			int numbers[6];
+			srand( static_cast<unsigned int>(time(NULL)) );
+			for (int x = 0; x<6; x++){
+			numbers[x] = rand()%6+1;
+			cout<<numbers[x]<<endl;
+			cout<<"\n";
+			success = true;
+			}
+		}
+
+		else if(choice == "2"){ 
+			cout<<"\n";
+			cout<<"My name is Souk";
+			cout<<"\n";
+			success = true;
+		}
+
+		else if(choice == "3"){
+			cout<<"\n";
+			cout<<"I just put choice 3 so I can have 3 choices. ";
+			cout<<"\n";
+			success = true;
+		}
+
+		else{
+			cout<<"\n";
+			cout<<"Invalid number, please try again"<<"\n"<<"\n";		
+			success = false;
+		}
+
+	
+	}while(!success);
+
+	
+
+    system("pause");
+	return 0;
+}
+
+//----[END]----
+

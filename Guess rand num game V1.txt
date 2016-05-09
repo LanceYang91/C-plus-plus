@@ -1,0 +1,241 @@
+// MOD2 Guessing Game.cpp : Defines the entry point for the console application.
+
+// Purpose: Guessing game, user must guess 5 digits from random generated arrays.
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <sstream>
+
+using namespace std;
+
+//function declaration
+void intro();
+void win();
+void lose();
+string guessedNum (string a);
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	//declarations
+	string guessNum,
+		answer[5];
+		   
+	int num,
+		i,
+		guess[5],
+		ranNum[5],
+		tries = 0;
+
+	srand(static_cast<unsigned int>(time(NULL)));
+	
+	//random number
+	ranNum[0] =	rand() %9+1;
+	ranNum[1] = rand() %9+1;
+	ranNum[2] = rand() %9+1;
+	ranNum[3] = rand() %9+1;
+	ranNum[4] = rand() %9+1;
+
+	//call function intro
+	intro();
+	
+	//loop, tries
+	while(tries != 10){
+
+		//turn info
+		tries++;
+		cout << "\n\nThis is turn " << tries << "\n\n";
+
+		//call funtion guessedNum, user input, guess number into int; str to int
+		stringstream ss1(guessedNum(guessNum));
+		ss1 >> num;
+	
+		//guess number into array; int to array
+		for(i = 4; i >= 0; i--){
+			guess[i] = num % 10;
+			num /= 10;
+		}
+	
+		//for guess[0] to ranNum
+		if(guess[0] == ranNum[0]){
+			answer[0] = "1";
+		}
+
+		else if(guess[0] == ranNum[1]||
+				guess[0] == ranNum[2]||
+				guess[0] == ranNum[3]||
+				guess[0] == ranNum[4]){
+
+					answer[0] = "2";
+		}
+
+		else{
+			answer[0] = "0";
+		}
+
+		//for guess[1] to ranNum
+		if(guess[1] == ranNum[1]){
+			answer[1] = "1";
+		}
+
+		else if(guess[1] == ranNum[0]||
+				guess[1] == ranNum[2]||
+				guess[1] == ranNum[3]||
+				guess[1] == ranNum[4]){
+
+					answer[1] = "2";
+		}
+
+		else{
+			answer[1] = "0";
+		}
+
+		//for guess[2] to ranNum
+		if(guess[2] == ranNum[2]){
+			answer[2] = "1";
+		}
+
+		else if(guess[2] == ranNum[1]||
+				guess[2] == ranNum[0]||
+				guess[2] == ranNum[3]||
+				guess[2] == ranNum[4]){
+
+					answer[2] = "2";
+		}
+
+		else{
+			answer[2] = "0";
+		}
+	
+		//for guess[3] to ranNum
+		if(guess[3] == ranNum[3]){
+			answer[3] = "1";
+		}
+
+		else if(guess[3] == ranNum[1]||
+				guess[3] == ranNum[2]||
+				guess[3] == ranNum[0]||
+				guess[3] == ranNum[4]){
+
+					answer[3] = "2";
+		}
+
+		else{
+			answer[3] = "0";
+		}
+
+		//for guess[4] to ranNum
+		if(guess[4] == ranNum[4]){
+			answer[4] = "1";
+		}
+
+		else if(guess[4] == ranNum[0]||
+				guess[4] == ranNum[1]||
+				guess[4] == ranNum[2]||
+				guess[4] == ranNum[3]){
+					
+					answer[4] = "2";
+		}
+
+		else{
+				answer[4] = "0";
+		}
+
+		//output
+		stringstream ss2;
+		ss2 << answer[0] << answer[1] << answer[2] << answer[3] << answer[4];
+		cout << "\n\nCPU response:\n\n";
+		cout << ss2.str();
+		cout << "\n\n";
+
+		//if correct player wins
+		if(answer[0] == "1" &&
+		   answer[1] == "1" &&
+		   answer[2] == "1" &&
+		   answer[3] == "1" &&
+		   answer[4] == "1"){
+			   
+				win();
+				system("pause");
+				return 0;
+		}
+
+	}//loop tries end
+
+	//if tries is over
+	lose();
+
+	system("pause");
+	return 0;
+}
+
+//function action; introduction/rules
+void intro(){
+
+	//output
+	cout << "\tWelcome to Guess my number.\n";
+	cout << "\tYou have 10 tries to guess my 5 numbers.\n";
+	cout << "\tMy repsonse will be 1, 2, or 0\n\n";
+	cout << "\t1 = correct number, and correct place\n\n";
+	cout << "\t2 = right number, incorrect place\n\n";
+	cout << "\t0 = number does not exit\n\n";
+	cout << "\tGood luck on trying to guess my number.\n\n";
+	system("pause");
+}
+
+void win(){
+
+	//output
+	cout << "\tYou guessed it correctly!\n\n";
+	cout << "\tYou have won the game!\n\n";
+}
+
+void lose(){
+
+	//output
+	cout << "\n\nCPU response:";
+	cout << "\n\n\tYou couldn't guess it. Game over.\n\n";
+}
+
+//function action; user input, check number
+string guessedNum (string a){
+
+	//declaration
+	bool success;
+	int guessNum;
+
+	//ask user input, int only
+	while(true){
+		cout << "Please enter a 5 digit number: ";
+		cin >> a;
+		stringstream guessStream(a);
+		if(guessStream >> guessNum)
+			break;
+		cout << "Invalid number, please try again\n\n";
+	}
+
+	//check length
+	do{
+		if(a.size() != 5){
+			while(true){
+				cout << "\nPlease enter a 5 digit number: ";
+				cin >> a;
+				stringstream guessStream(a);
+				if(guessStream >> guessNum)
+				break;
+				cout << "Invalid number, please try again\n\n";			
+			}
+
+			success = false;
+		}
+
+		else{
+			success = true;
+		}
+
+	}while(!success);
+
+	return a;
+}
+

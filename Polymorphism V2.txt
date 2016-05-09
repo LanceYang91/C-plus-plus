@@ -1,0 +1,113 @@
+// Programming II_MOD06_Assignment.cpp : Defines the entry point for the console application.
+//
+//	Changed to the use of polymorphism
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//class 1
+class Person{
+public: 
+	//declarations	
+	string name;
+	string address;
+	string city;
+	string state;
+	string zip;
+	string phoneNumber;
+	string grade;
+	string gpa; 
+	string course;
+
+	//declaration function
+	void setValues(string a, string b, string c, string d, 
+		string e, string f, string g, string h, string i){
+
+			name = a;
+			address = b;
+			city = c;
+			state = d;
+			zip = e;
+			phoneNumber = f;
+			grade = g;
+			gpa = h;
+			course = i;
+	}
+
+	//display function
+	void display(){
+		cout << "This is for Person class" << endl;
+		cout << "Name: " << name << endl;
+		cout << "Address: " << address << endl;
+		cout << "City: " << city << endl;
+		cout << "State: " << state << endl;
+		cout << "Zip: " << zip << endl;
+		cout << "Phone Number: " << phoneNumber << "\n\n\n";
+	}
+	
+};
+
+//class 2 
+class Student: public Person{
+public:
+
+	//display function
+	void display(){
+		cout << "\n\nThis is for a Student class" << endl;
+		cout << "Name: " << name << endl;
+		cout << "Address: " << address << endl;
+		cout << "City: " << city << endl;
+		cout << "State: " << state << endl;
+		cout << "Zip: " << zip << endl;
+		cout << "Phone Number: " << phoneNumber << endl;
+		cout << "Grade: " << grade << endl;
+		cout << "GPA: " << gpa << endl;
+		cout << "Course: " << course << "\n\n\n";
+	}
+
+};
+
+//class 3
+class Professional: public Person{
+public:
+	//display function
+	void display(){
+		cout << "\n\nI am the Professional class" << endl;
+		cout << "Name: " << name << endl;
+		cout << "Address: " << address << endl;
+		cout << "City: " << city << endl;
+		cout << "State: " << state << endl;
+		cout << "Zip: " << zip << endl;
+		cout << "Phone Number: " << phoneNumber << endl;
+		cout << "Grade: " << grade << endl;
+		cout << "GPA: " << gpa << endl;
+		cout << "Course: " << course << "\n\n\n";
+	}
+};
+
+//main window
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Person p;
+	Student s;
+	Professional pro;
+
+	Person *person1 = &p;
+	Person *person2 = &s;
+	Person *person3 = &pro;
+
+	person1->setValues("Name", "Address", "City", "State", "Zip", "Phone Number", "Grade", "GPA", "Course");
+	person2->setValues("Souk", "123 ABC Road", "ABC City", "123 State", "12345", "(123) - 456 - 7890", "D", "2.5", "Weilding");
+	person3->setValues("Lan", "456 DEF Road", "DEF City", "456 State", "67890", "(456) - 789 - 0123", "PRO", "4.0", "Weilding");
+
+	p.display();
+	s.display();
+	pro.display();
+
+	system("pause");
+	return 0;
+}

@@ -1,0 +1,44 @@
+//[c++]
+
+//[Entering a sentence + couting the letters + price per letter + output of price]
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+{
+	float pricePerLetter = 0;
+	char chartersToPrint;
+	floate count = 0;
+	double total = 0;
+
+	
+	cout<<"Please enter price per letter: $";
+	cin >> pricePerLetter;
+
+
+//user input
+	cout << "Please end sentence with a '.' or '!' or '?' at the end of your sentence" << endl;
+	cout << "Then press ENTER to sumbit." << endl;
+	cout <<"\nSentence to print: ";
+
+
+//user input
+	for ( ;(charactersToPrint!='.') && (charactersToPrint!='!') && (charactersToPrint!='?')//Finds the end of the sentence
+	{
+		cin >> charactersToPrint;
+		count++;
+	}
+
+
+	total = count * pricePerLetter;
+	cout << "you have enterd" << count << "letters." << endl;
+	cout << "each letter is priced at $" << pricePerLetter << endl;
+	cout << "your total is" << total << endl;
+	
+	system("pause");
+	return 0;
+
+}

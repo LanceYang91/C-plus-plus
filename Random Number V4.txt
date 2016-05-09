@@ -1,0 +1,27 @@
+//[RANDOM NUMBER 6]
+
+//[C++]
+
+
+#include <ctime>
+
+{
+	
+int dice [6];
+srand(static_cast<unsigned int>(time(NULL)));
+
+	dice[0]=rand() % 6+1;
+	cout<<"Dice 1 is: "<<dice[0]<<endl;
+	dice[1]=rand() % 6+1;
+	cout<<"Dice 2 is: "<<dice[1]<<endl;
+	dice[2]=rand() % 6+1;
+	cout<<"Dice 3 is: "<<dice[2]<<endl;
+	dice[3]=rand() % 6+1;
+	cout<<"Dice 4 is: "<<dice[3]<<endl;
+	dice[4]=rand() % 6+1;
+	cout<<"Dice 5 is: "<<dice[4]<<endl;
+	dice[5]=rand() % 6+1;
+	cout<<"Dice 6 is: "<<dice[5]<<endl;
+	cout<<"\n";
+
+}
