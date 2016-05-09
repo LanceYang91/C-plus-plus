@@ -1,0 +1,431 @@
+
+
+#include "stdafx.h"
+#include<iostream>
+#include<windows.h>
+#include<thread> 
+#include<chrono> 
+#include<conio.h>
+#include<stdlib.h>
+#include<time.h>
+
+using namespace std;
+
+class TetrisShape
+{
+public:
+	char shapeArray[4][4];
+	int shapeType;
+
+	int shapeTopLeftX;
+	int shapeTopLeftY;
+
+	TetrisShape(int shapetype);
+	TetrisShape();
+
+	void setShape(int shapetype);
+	bool moveShape(int input, int& newShapeTopLeftX, int& newShapeTopLeftY);
+};
+
+char bucket[25][13];
+enum{ UP_ARROW = 72, DOWN_ARROW = 80, LEFT_ARROW = 75, RIGHT_ARROW = 77 };
+
+void initializeBucket()
+{
+	int i, j;
+	for (i = 0; i < 25; i++)
+	{
+		for (j = 0; j < 13; j++)
+			bucket[i][j] = ' ';
+		bucket[i][0] = '#';
+		bucket[i][11] = '#';
+	}
+
+	for (i = 0; i < 12; i++)
+		bucket[24][i] = '#';
+}
+
+void setCursorTo(int x, int y)//coordinate setup
+{
+	HANDLE handle;
+	COORD position;
+	handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	position.X = x;
+	position.Y = y;
+	SetConsoleCursorPosition(handle, position);
+}
+void displayBucket()//display bucket
+{
+
+	//for loop to display bucket
+	for (int y = 0; y <25; y++)
+	{
+		setCursorTo(0, y);
+		for (int j = 0; j < 12; j++)
+			cout << bucket[y][j];
+		cout << endl;
+	}
+}
+
+void updateBucket(TetrisShape localTetrisShape)//update bucket 
+{
+	int topX = localTetrisShape.shapeTopLeftX;
+	int topY = localTetrisShape.shapeTopLeftY;
+
+	for (int i = 0; i <4; i++)
+	{
+		for (int j = 0; j <4; j++)
+		{
+			if (localTetrisShape.shapeArray[i][j] != ' ')
+				bucket[i + topY][j + topX] = localTetrisShape.shapeArray[i][j];
+		}
+	}
+}
+
+void clearOldShape(TetrisShape localTetrisShape)
+{
+	int topX = localTetrisShape.shapeTopLeftX;
+	int topY = localTetrisShape.shapeTopLeftY;
+
+	for (int i = 0; i <4; i++)
+	{
+		for (int j = 0; j <4; j++)
+		{
+			if (localTetrisShape.shapeArray[i][j] != ' ')
+				bucket[i + topY][j + topX] = ' ';
+		}
+	}
+}
+
+bool stuckCheck(TetrisShape shape, int newTopX, int newTopY)//for collision detection
+{
+	for (int i = 0; i <4; i++)
+	{
+		for (int j = 0; j <4; j++)
+		{
+			if (shape.shapeArray[i][j] != ' ')
+			{
+				int y = newTopY + i;
+				int x = newTopX + j;
+
+				if (y < 0 || y >= 25)
+					return true;
+
+				if (x < 0 || x >= 12)
+					return true;
+
+				// inside bucket
+				if (bucket[y][x] != ' ')
+					return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool processDownArrow(TetrisShape& shape)
+{
+	if (stuckCheck(shape, shape.shapeTopLeftX, shape.shapeTopLeftY + 1))
+		return true;
+	shape.shapeTopLeftY += 1;
+	return false;
+}
+
+void processLeftArrow(TetrisShape& shape)
+{
+
+	if (stuckCheck(shape, shape.shapeTopLeftX - 1, shape.shapeTopLeftY))
+		return;
+	shape.shapeTopLeftX -= 1;
+}
+
+void processRightArrow(TetrisShape& shape)
+{
+	if (stuckCheck(shape, shape.shapeTopLeftX + 1, shape.shapeTopLeftY))
+		return;
+	shape.shapeTopLeftX += 1;
+}
+
+int getUserInput()
+{
+	int key = 0;
+	if (_kbhit())
+	{
+		key = _getch();
+	}
+	return key;
+}
+
+int checkFullRow()
+{
+	int i, j, k;
+	int count = 0;
+	for (i = 23; i >= 0; i--)
+	{
+		bool full = true;
+		for (j = 1; j <= 10 && full; j++)
+		{
+			if (bucket[i][j] == ' ')
+				full = false;
+		}
+
+		// if this row is full, remove this row
+		if (full)
+		{
+			count++;
+			for (k = i; k > 0; k--)
+			{
+				for (j = 1; j <= 10; j++)
+					bucket[k][j] = bucket[k - 1][j];
+			}
+
+			// fill blank at top
+			for (j = 1; j <= 10; j++)
+				bucket[0][j] = ' ';
+
+			// check this row again
+			i++;
+		}
+	}
+	return count;
+}
+
+void inline timeControl(int timer)//call this timer at last in while loop of main function. 
+{
+	Sleep(timer);
+}
+
+int main()
+{
+	srand(time(0));  // initialize the random seed
+
+	int gameOver = 0;
+	int shapeType = (rand() % 7) + 0;//Randomly generates a number and sends it to the constructor to choose shape with the 0 to 6 condition
+	TetrisShape currentShape(shapeType);
+	TetrisShape nextShape(rand() % 7);
+
+	int newShapeTopLeftY;
+	int newShapeTopLeftX;
+	int input;
+	bool reached = false;   // reach bottom
+	int timeCount = 0;
+	bool display = false;
+	int score = 0;
+
+	initializeBucket();
+
+	updateBucket(currentShape);//updates and displays bucket
+	displayBucket();
+
+	while (gameOver == 0)//while to start game
+	{
+		clearOldShape(currentShape);
+
+		input = getUserInput();
+		display = false;
+		reached = false;
+
+		if (input == LEFT_ARROW || input == RIGHT_ARROW ||
+			input == UP_ARROW || input == DOWN_ARROW)
+		{
+			reached = currentShape.moveShape(input, newShapeTopLeftX, newShapeTopLeftY);
+			currentShape.shapeTopLeftY = newShapeTopLeftY;
+			currentShape.shapeTopLeftX = newShapeTopLeftX;
+			display = true;
+		}
+
+		timeCount++;
+		if (timeCount == 100)
+		{
+			// every 2 seconds drop
+			reached = currentShape.moveShape(0, newShapeTopLeftX, newShapeTopLeftY);
+			currentShape.shapeTopLeftY = newShapeTopLeftY;
+			currentShape.shapeTopLeftX = newShapeTopLeftX;
+			display = true;
+			timeCount = 0;
+		}
+
+		updateBucket(currentShape);
+
+		if (reached)
+		{
+			int cnt = checkFullRow();
+			if (cnt == 1)
+				score += 10;
+			else if (cnt == 2)
+				score += 25;
+			else if (cnt == 3)
+				score += 40;
+			else if (cnt == 4)
+				score += 60;
+
+			//  create another
+			currentShape.setShape(nextShape.shapeType);
+			nextShape.setShape(rand() % 7);
+
+			if (stuckCheck(currentShape, currentShape.shapeTopLeftX,
+				currentShape.shapeTopLeftY))
+			{
+				gameOver = 1;
+			}
+			else
+			{
+				updateBucket(currentShape);//updates and displays bucket
+				display = true;
+			}
+		}
+
+		if (display)
+		{
+			displayBucket();
+			setCursorTo(25, 0);
+			cout << "Current Score: " << score << "     ";
+		}
+
+		//Sleeps for the game
+		timeControl(20);  // 20 mill seconds
+
+	}
+
+	system("PAUSE");
+	return 0;
+}
+
+
+// Default constructor
+TetrisShape::TetrisShape()
+{
+	shapeTopLeftX = 6;
+	shapeTopLeftY = 0;
+	shapeType = -1;
+}
+//Constructor for shape arrays
+TetrisShape::TetrisShape(int shapetype)
+{
+	setShape(shapetype);
+}
+
+void TetrisShape::setShape(int shapetype)
+{
+	shapeType = shapetype;
+	shapeTopLeftX = 6;
+	shapeTopLeftY = 0;
+
+	switch (shapetype)
+	{
+	case 0:
+		//L Shape
+		shapeArray[0][0] = ' '; shapeArray[1][0] = 'X'; shapeArray[2][0] = ' '; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = ' '; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = 'X'; shapeArray[2][2] = 'X'; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 1:
+		//I Shape
+		shapeArray[0][0] = ' '; shapeArray[1][0] = 'X'; shapeArray[2][0] = ' '; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = ' '; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = 'X'; shapeArray[2][2] = ' '; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = 'X'; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 2:
+		//J Shape
+		shapeArray[0][0] = ' '; shapeArray[1][0] = 'X'; shapeArray[2][0] = ' '; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = ' '; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = 'X'; shapeArray[1][2] = 'X'; shapeArray[2][2] = ' '; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 3:
+		//O Shape
+		shapeArray[0][0] = ' '; shapeArray[1][0] = ' '; shapeArray[2][0] = ' '; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = 'X'; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = 'X'; shapeArray[2][2] = 'X'; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 4:
+		//T Shape
+		shapeArray[0][0] = 'X'; shapeArray[1][0] = 'X'; shapeArray[2][0] = 'X'; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = ' '; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = ' '; shapeArray[2][2] = ' '; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 5:
+		//S Shape
+		shapeArray[0][0] = ' '; shapeArray[1][0] = 'X'; shapeArray[2][0] = 'X'; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = 'X'; shapeArray[1][1] = 'X'; shapeArray[2][1] = ' '; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = ' '; shapeArray[2][2] = ' '; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	case 6:
+		//Z Shape
+		shapeArray[0][0] = 'X'; shapeArray[1][0] = 'X'; shapeArray[2][0] = ' '; shapeArray[3][0] = ' ';
+		shapeArray[0][1] = ' '; shapeArray[1][1] = 'X'; shapeArray[2][1] = 'X'; shapeArray[3][1] = ' ';
+		shapeArray[0][2] = ' '; shapeArray[1][2] = ' '; shapeArray[2][2] = ' '; shapeArray[3][2] = ' ';
+		shapeArray[0][3] = ' '; shapeArray[1][3] = ' '; shapeArray[2][3] = ' '; shapeArray[3][3] = ' ';
+		break;
+	}
+}
+
+// Return if reach bottom
+bool TetrisShape::moveShape(int input, int& newShapeTopLeftX, int& newShapeTopLeftY)
+{
+	int i;
+	int oldX = shapeTopLeftX;
+	int oldY = shapeTopLeftY;
+	bool reached = false;
+	char tempCellVal;
+
+	switch (input)
+	{
+	case UP_ARROW:
+		// after rotation, sometimes we will have stuck
+		//  stop such rotate
+		do
+		{
+			tempCellVal = shapeArray[0][0];
+			shapeArray[0][0] = shapeArray[0][3];
+			shapeArray[0][3] = shapeArray[3][3];
+			shapeArray[3][3] = shapeArray[3][0];
+			shapeArray[3][0] = tempCellVal;
+			tempCellVal = shapeArray[0][1];
+			shapeArray[0][1] = shapeArray[1][3];
+			shapeArray[1][3] = shapeArray[3][2];
+			shapeArray[3][2] = shapeArray[2][0];
+			shapeArray[2][0] = tempCellVal;
+			tempCellVal = shapeArray[0][2];
+			shapeArray[0][2] = shapeArray[2][3];
+			shapeArray[2][3] = shapeArray[3][1];
+			shapeArray[3][1] = shapeArray[1][0];
+			shapeArray[1][0] = tempCellVal;
+			tempCellVal = shapeArray[1][1];
+			shapeArray[1][1] = shapeArray[1][2];
+			shapeArray[1][2] = shapeArray[2][2];
+			shapeArray[2][2] = shapeArray[2][1];
+			shapeArray[2][1] = tempCellVal;
+		} while (stuckCheck(*this, shapeTopLeftX, shapeTopLeftY));
+
+		break;
+	case DOWN_ARROW:
+		for (i = 0; i < 3 && !reached; i++)
+			reached = processDownArrow(*this);
+		break;
+	case LEFT_ARROW:
+		processLeftArrow(*this);
+		break;
+	case RIGHT_ARROW:
+		processRightArrow(*this);
+		break;
+	default:
+		reached = processDownArrow(*this);
+		break;
+	}
+
+	// get the new position
+	newShapeTopLeftX = shapeTopLeftX;
+	newShapeTopLeftY = shapeTopLeftY;
+
+	// recover current position to old
+	shapeTopLeftX = oldX;
+	shapeTopLeftY = oldY;
+
+	return reached;
+}
